@@ -1,0 +1,3 @@
+/Users/macbook/new-mode/build/CMakeFiles/new-mode.dir
+/Users/macbook/new-mode/build/CMakeFiles/edit_cache.dir
+/Users/macbook/new-mode/build/CMakeFiles/rebuild_cache.dir

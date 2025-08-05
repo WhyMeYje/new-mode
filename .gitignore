@@ -1,0 +1,30 @@
+# Игнорировать исполняемые файлы
+*.exe
+*.out
+*.app
+
+# Игнорировать объектные файлы
+*.o
+*.obj
+
+# Игнорировать временные файлы редакторов
+*~
+*.swp
+*.swo
+
+# Игнорировать каталоги сборки
+/build/
+/bin/
+/Debug/
+/Release/
+
+# Игнорировать файлы CMake
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+
+# Игнорировать пользовательские настройки IDE
+.vscode/
+.idea/
+*.user

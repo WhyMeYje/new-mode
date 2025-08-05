@@ -1,0 +1,8 @@
+[
+{
+  "directory": "/Users/macbook/new-mode/build",
+  "command": "/usr/bin/clang++ -g -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.0.sdk -mmacosx-version-min=14.6 -o CMakeFiles/new-mode.dir/server.cpp.o -c /Users/macbook/new-mode/server.cpp",
+  "file": "/Users/macbook/new-mode/server.cpp",
+  "output": "CMakeFiles/new-mode.dir/server.cpp.o"
+}
+]
