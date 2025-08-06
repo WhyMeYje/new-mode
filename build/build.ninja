@@ -41,35 +41,66 @@ include CMakeFiles/rules.ninja
 
 cmake_ninja_workdir = /Users/macbook/new-mode/build/
 # =============================================================================
-# Object build statements for EXECUTABLE target new-mode
+# Object build statements for EXECUTABLE target server
 
 
 #############################################
-# Order-only phony target for new-mode
+# Order-only phony target for server
 
-build cmake_object_order_depends_target_new-mode: phony || .
+build cmake_object_order_depends_target_server: phony || .
 
-build CMakeFiles/new-mode.dir/server.cpp.o: CXX_COMPILER__new-mode_unscanned_Debug /Users/macbook/new-mode/server.cpp || cmake_object_order_depends_target_new-mode
-  DEP_FILE = CMakeFiles/new-mode.dir/server.cpp.o.d
+build CMakeFiles/server.dir/server.cpp.o: CXX_COMPILER__server_unscanned_Debug /Users/macbook/new-mode/server.cpp || cmake_object_order_depends_target_server
+  DEP_FILE = CMakeFiles/server.dir/server.cpp.o.d
   FLAGS = -g -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.0.sdk -mmacosx-version-min=14.6
-  OBJECT_DIR = CMakeFiles/new-mode.dir
-  OBJECT_FILE_DIR = CMakeFiles/new-mode.dir
+  OBJECT_DIR = CMakeFiles/server.dir
+  OBJECT_FILE_DIR = CMakeFiles/server.dir
 
 
 # =============================================================================
-# Link build statements for EXECUTABLE target new-mode
+# Link build statements for EXECUTABLE target server
 
 
 #############################################
-# Link the executable new-mode
+# Link the executable server
 
-build new-mode: CXX_EXECUTABLE_LINKER__new-mode_Debug CMakeFiles/new-mode.dir/server.cpp.o
+build server: CXX_EXECUTABLE_LINKER__server_Debug CMakeFiles/server.dir/server.cpp.o
   FLAGS = -g -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.0.sdk -mmacosx-version-min=14.6
-  OBJECT_DIR = CMakeFiles/new-mode.dir
+  OBJECT_DIR = CMakeFiles/server.dir
   POST_BUILD = :
   PRE_LINK = :
-  TARGET_FILE = new-mode
-  TARGET_PDB = new-mode.dbg
+  TARGET_FILE = server
+  TARGET_PDB = server.dbg
+
+# =============================================================================
+# Object build statements for EXECUTABLE target client
+
+
+#############################################
+# Order-only phony target for client
+
+build cmake_object_order_depends_target_client: phony || .
+
+build CMakeFiles/client.dir/client.cpp.o: CXX_COMPILER__client_unscanned_Debug /Users/macbook/new-mode/client.cpp || cmake_object_order_depends_target_client
+  DEP_FILE = CMakeFiles/client.dir/client.cpp.o.d
+  FLAGS = -g -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.0.sdk -mmacosx-version-min=14.6
+  OBJECT_DIR = CMakeFiles/client.dir
+  OBJECT_FILE_DIR = CMakeFiles/client.dir
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target client
+
+
+#############################################
+# Link the executable client
+
+build client: CXX_EXECUTABLE_LINKER__client_Debug CMakeFiles/client.dir/client.cpp.o
+  FLAGS = -g -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.0.sdk -mmacosx-version-min=14.6
+  OBJECT_DIR = CMakeFiles/client.dir
+  POST_BUILD = :
+  PRE_LINK = :
+  TARGET_FILE = client
+  TARGET_PDB = client.dbg
 
 
 #############################################
@@ -106,7 +137,7 @@ build rebuild_cache: phony CMakeFiles/rebuild_cache.util
 #############################################
 # Folder: /Users/macbook/new-mode/build
 
-build all: phony new-mode
+build all: phony server client
 
 # =============================================================================
 # Built-in targets

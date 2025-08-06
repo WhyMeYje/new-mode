@@ -2,6 +2,8 @@
 #include <iostream>
 #include <string>
 #include <cstring>
+#include <cstdlib>
+#include <errno.h>
 
 #include "server.h"
 
@@ -60,24 +62,33 @@ int main() {
         char buffer[BUFFER];
         memset(buffer, 0, BUFFER);
         int bytes_received = recv(client_fd, buffer, BUFFER - 1, 0);
-        if (bytes_received <= 0) {
+        if (bytes_received < 0) {
+            int err = errno;
+            outLog << "Ошибка recv: " << strerror(err) << " (" << err << ")\n";
+            break;
+        }
+        if (bytes_received == 0) {
             outLog << "Клиент отключился\n";
             break;
         }
-
+    
         std::string client_message(buffer, bytes_received);
+        if (!client_message.empty() && client_message.back() == '\n') {
+            client_message.pop_back();
+        }
+
         outLog << "Получено сообщение\n";
         outHistory << client_message << std::endl;
-
+    
         if (client_message.empty()) {
             continue;
         }
-
+    
         if (client_message == "quit" || client_message == "exit") {
             outLog << "Клиент завершил чат\n";
             break;
         }
-
+    
         std::string response = client_message;
         int bytes_sent = send(client_fd, response.c_str(), response.length(), 0);
         if (bytes_sent < 0) {

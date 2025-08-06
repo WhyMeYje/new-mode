@@ -4,6 +4,9 @@ project(new-mode)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(SOURCES server.cpp server.h)
 
-add_executable(${PROJECT_NAME} ${SOURCES})
+set(SERVER_SOURCES server.cpp server.h)
+add_executable(server ${SERVER_SOURCES})
+
+set(CLIENT_SOURCES client.cpp client.h)
+add_executable(client ${CLIENT_SOURCES})

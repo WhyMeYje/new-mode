@@ -1,5 +1,7 @@
 #include <iostream>
 #include <string>
+#include <cstring>
+#include <locale>
 
 #include "client.h"
 
@@ -27,6 +29,29 @@ int main () {
     std::cout << "Команды: 'exit' или 'quit' для выхода\n\n";
 
     std::string message;
+    std::getline(std::cin, message);
+
+    if (send(client_socket_, message.c_str(), message.length(), 0) < 0) {
+        std::cout << "Ошибка отправки сообщения\n";
+        return -1;
+    }
+
+    if (message == "exit" || message == "quit") {
+        send(client_socket_, message.c_str(), message.length(), 0);
+        std::cout << "Выход из программы...\n";
+        return -1;
+    }
+
+    char buffer[BUFFER];
+    memset(buffer, 0, BUFFER);
+    int bytes_received = recv(client_socket_, buffer, BUFFER - 1, 0);
+    if (bytes_received > 0) {
+        std::cout << "Ответ сервера: " << std::string(buffer, bytes_received) << "\n\n";
+    } 
+    else {
+        std::cout << "Ошибка получения ответа от сервера\n";
+        return -1;
+    }
 
     while (true) {
         std::getline(std::cin, message);
