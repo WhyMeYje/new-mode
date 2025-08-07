@@ -25,7 +25,7 @@ int main() {
 
     int socket_ = socket(AF_INET, SOCK_STREAM, 0);
     if (socket_ == -1) {
-        outLog << "Ошибка: не создан сокет\n";
+        outLog << "Ошибка: не удалось создать сокет\n";
         exit(EXIT_FAILURE);
     }
     outLog << "Сокет создан\n";
@@ -84,18 +84,11 @@ int main() {
             continue;
         }
     
-        if (client_message == "quit" || client_message == "exit") {
+        if (client_message == "quit\n" || client_message == "exit\n") {
             outLog << "Клиент завершил чат\n";
-            break;
+            bytes_received = 0;
         }
     
-        std::string response = client_message;
-        int bytes_sent = send(client_fd, response.c_str(), response.length(), 0);
-        if (bytes_sent < 0) {
-            outLog << "Ошибка отправки клиенту\n";
-            break;
-        }
-        outLog << "Отправлено клиенту: " << response << "\n";
         std::cout << "Клиент: " << client_message << "\n";
     }
 
