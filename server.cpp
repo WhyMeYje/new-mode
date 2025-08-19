@@ -1,35 +1,65 @@
 #include <fstream>
 #include <iostream>
 #include <string>
-#include <cstring>
 #include <cstdlib>
 #include <errno.h>
 
 #include "server.h"
 
 int main() {
-    std::ofstream outLog;
+    setlocale(LC_ALL, "ru");
+    Server server;
+    return server.run();
+}
+
+//=============================================
+
+Server::Server() : socket_(-1), client_fd(-1) {
     outLog.open(WLOG, std::ios::app);
     if (!outLog.is_open()) {
         outLog.close();
-        return -1;
+        return;
     }
     outLog << "----ЗАПУСК ПРОГРАММЫ----\n";
 
-    std::ofstream outHistory;
     outHistory.open(WHISTORY, std::ios::app);
     if (!outHistory.is_open()) {
         outHistory.close();
+        return;
+    }
+}
+
+Server::~Server() {
+    cleanUp();
+}
+
+int Server::run() {
+    if (!outLog.is_open() || !outHistory.is_open()) {
         return -1;
     }
 
-    int socket_ = socket(AF_INET, SOCK_STREAM, 0);
+    if (!setupSocket()) { return -1; }
+    if (!bindSocket()) { return -1; }
+    if (!listenSocket()) { return -1; }
+    if (!acceptClient()) { return -1; }
+
+    handleClient();
+    outLog << "----ЗАВЕРШЕНИЕ ПРОГРАММЫ----\n\n\n";
+    return 0;
+}
+
+bool Server::setupSocket() {
+    socket_ = socket(AF_INET, SOCK_STREAM, 0);
     if (socket_ == -1) {
-        outLog << "Ошибка: не создан сокет\n";
-        exit(EXIT_FAILURE);
+        outLog << "Ошибка: не удалось создать сокет\n";
+        return false;
     }
     outLog << "Сокет создан\n";
 
+    return true;
+}
+
+bool Server::bindSocket() {
     sockaddr_in serverAddress;
     serverAddress.sin_family = AF_INET;
     serverAddress.sin_port = htons(HOST);
@@ -39,25 +69,37 @@ int main() {
     int b_result = bind(socket_, reinterpret_cast<sockaddr*>(&serverAddress), sizeof(serverAddress));
     if (b_result < 0) {
         outLog << "Ошибка: Сокет не смог привязаться к адресу и порту\n";
-        exit(EXIT_FAILURE);
+        return false;
     }
     outLog << "Сокет привязан к адресу и порту\n";
 
+    return true;
+}
+
+bool Server::listenSocket() {
     int l_result = listen(socket_, SOMAXCONN);
     if (l_result < 0) {
         outLog << "Ошибка: Сокет не перешел в режим прослушивания\n";
-        exit(EXIT_FAILURE);
+        return false;
     }
     outLog << "Сокет перешел в режим прослушивания\n";
 
+    return true;
+}
+
+bool Server::acceptClient() {
     socklen_t addr_len = sizeof(serverAddress);
-    int client_fd = accept(socket_, (struct sockaddr*)&serverAddress, &addr_len);
+    client_fd = accept(socket_, (struct sockaddr*)&serverAddress, &addr_len);
     if (client_fd < 0) {
         outLog << "Ошибка: клиент не подключился\n";
         exit(EXIT_FAILURE);
     }
     outLog << "Клиент подключился\n";
 
+    return true;
+}
+
+bool Server::handleClient() {
     while (true) {
         char buffer[BUFFER];
         memset(buffer, 0, BUFFER);
@@ -84,25 +126,33 @@ int main() {
             continue;
         }
     
-        if (client_message == "quit" || client_message == "exit") {
+        if (client_message == "quit\n" || client_message == "exit\n") {
             outLog << "Клиент завершил чат\n";
-            break;
+            bytes_received = 0;
         }
     
-        std::string response = client_message;
-        int bytes_sent = send(client_fd, response.c_str(), response.length(), 0);
-        if (bytes_sent < 0) {
-            outLog << "Ошибка отправки клиенту\n";
-            break;
-        }
-        outLog << "Отправлено клиенту: " << response << "\n";
         std::cout << "Клиент: " << client_message << "\n";
     }
 
-    outLog << "----ЗАВЕРШЕНИЕ ПРОГРАММЫ----\n\n\n";
-    close(client_fd);
-    close(socket_);
-    outLog.close();
-    outHistory.close();
-    return 0;
+    return true;
+}
+
+bool Server::cleanUp() {
+    if (client_fd != -1) {
+        close(client_fd);
+        client_fd = -1;
+    }
+    if (socket_ != -1) {
+        close(socket_);
+        socket_ = -1;
+    }
+
+    if (outLog.is_open()) {
+        outLog.close();
+    }
+    if (outHistory.is_open()) {
+        outHistory.close();
+    }
+
+    return true;
 }

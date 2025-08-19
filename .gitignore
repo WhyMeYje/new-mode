@@ -27,4 +27,5 @@ Makefile
 # Игнорировать пользовательские настройки IDE
 .vscode/
 .idea/
-*.user
+
+.DS_Store
